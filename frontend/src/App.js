@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DICT, SERVICE_VALUES } from "@/i18n";
 import useReveal from "@/lib/useReveal";
 import useParallax from "@/lib/useParallax";
+import useScrollDepth from "@/lib/useScrollDepth";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -265,6 +266,46 @@ function About({ t }) {
 }
 
 /* ------------------------------- Services ------------------------------ */
+function ServiceCard({ s, i }) {
+  const ref = useScrollDepth({ minScale: 0.93, minOpacity: 0.45, maxOffset: 28 });
+  return (
+    <article
+      ref={ref}
+      data-testid={`service-card-${i}`}
+      className="trace-card relative bg-[#0b0b0b] rounded-sm p-8 md:p-10 border border-white/8 flex flex-col min-h-[420px] will-change-transform"
+      style={{ transformOrigin: "center 60%" }}
+    >
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[11px] tracking-[0.25em] text-neon">{s.tag}</span>
+        <Sparkles size={14} className="text-white/30" />
+      </div>
+      <h3 className="mt-8 font-serif text-3xl md:text-[34px] leading-tight tracking-tight">{s.title}</h3>
+      <p className="mt-4 font-sans text-sm text-white/55 leading-relaxed">{s.desc}</p>
+
+      <ul className="mt-6 space-y-2.5">
+        {s.bullets.map((b, k) => (
+          <li key={k} className="flex items-start gap-2.5 font-mono text-[12px] text-white/70">
+            <span className="text-neon mt-0.5">›</span>
+            <span className="font-sans text-sm text-white/75">{b}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
+        <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">SCHEDULE</span>
+        <a
+          href="#contact"
+          data-testid={`service-card-cta-${i}`}
+          className="text-white/85 hover:text-neon transition-colors"
+          aria-label={`${s.title} CTA`}
+        >
+          <ArrowUpRight size={20} />
+        </a>
+      </div>
+    </article>
+  );
+}
+
 function Services({ t }) {
   return (
     <section id="services" data-testid="services-section" className="relative py-28 md:py-40 border-t border-white/5">
@@ -287,39 +328,7 @@ function Services({ t }) {
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5">
           {t.services.list.map((s, i) => (
-            <article
-              key={i}
-              data-testid={`service-card-${i}`}
-              className="trace-card relative bg-[#0b0b0b] rounded-sm p-8 md:p-10 border border-white/8 flex flex-col min-h-[420px]"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[11px] tracking-[0.25em] text-neon">{s.tag}</span>
-                <Sparkles size={14} className="text-white/30" />
-              </div>
-              <h3 className="mt-8 font-serif text-3xl md:text-[34px] leading-tight tracking-tight">{s.title}</h3>
-              <p className="mt-4 font-sans text-sm text-white/55 leading-relaxed">{s.desc}</p>
-
-              <ul className="mt-6 space-y-2.5">
-                {s.bullets.map((b, k) => (
-                  <li key={k} className="flex items-start gap-2.5 font-mono text-[12px] text-white/70">
-                    <span className="text-neon mt-0.5">›</span>
-                    <span className="font-sans text-sm text-white/75">{b}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
-                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/40">SCHEDULE</span>
-                <a
-                  href="#contact"
-                  data-testid={`service-card-cta-${i}`}
-                  className="text-white/85 hover:text-neon transition-colors"
-                  aria-label={`${s.title} CTA`}
-                >
-                  <ArrowUpRight size={20} />
-                </a>
-              </div>
-            </article>
+            <ServiceCard key={i} s={s} i={i} />
           ))}
         </div>
       </div>
