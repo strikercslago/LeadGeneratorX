@@ -18,6 +18,13 @@ const PORTRAIT_HERO = "https://customer-assets.emergentagent.com/job_09576fd4-b8
 const PORTRAIT_LIFESTYLE = "https://customer-assets.emergentagent.com/job_09576fd4-b8a5-4930-b967-b1ac5bbfce0e/artifacts/kw5rs0qt_WhatsApp%20Image%202026-04-28%20at%2018.32.59.jpeg";
 const PORTRAIT_LAPTOP = "https://customer-assets.emergentagent.com/job_09576fd4-b8a5-4930-b967-b1ac5bbfce0e/artifacts/xe0h8mj2_WhatsApp%20Image%202026-04-28%20at%2018.32.55.jpeg";
 
+const CRED_LOGOS = [
+  "https://customer-assets.emergentagent.com/job_ai-strategy-pro-4/artifacts/g4dnxc8u_image.png",
+  "https://customer-assets.emergentagent.com/job_ai-strategy-pro-4/artifacts/jc01dc2s_image.png",
+  "https://customer-assets.emergentagent.com/job_ai-strategy-pro-4/artifacts/b6iobv27_image.png",
+  "https://customer-assets.emergentagent.com/job_ai-strategy-pro-4/artifacts/sj6240oy_image.png",
+];
+
 const PHONE = "+1 (619) 997-1471";
 const EMAIL = "lucasa@bluegemsmgmt.com";
 
@@ -219,7 +226,7 @@ function About({ t }) {
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-5 reveal">
             <div ref={imgRef} className="relative aspect-square w-full will-change-transform">
-              <img src={PORTRAIT_LIFESTYLE} alt="Lucas Azaro lifestyle" className="absolute inset-0 w-full h-full object-cover rounded-sm" />
+              <img src={PORTRAIT_LIFESTYLE} alt="Lucas Azaro lifestyle" className="absolute inset-0 w-full h-full object-cover rounded-sm" style={{ objectPosition: "center 30%" }} />
               <div className="absolute inset-0 ring-1 ring-white/10 rounded-sm pointer-events-none" />
               <div className="absolute -bottom-3 -right-3 font-mono text-[10px] tracking-[0.25em] uppercase text-white/55 bg-ink px-3 py-1.5 border border-white/10">
                 @lucasazaro · 2026
@@ -339,14 +346,26 @@ function Credentials({ t }) {
                 <div
                   key={i}
                   data-testid={`credential-${i}`}
-                  className="bg-ink p-8 md:p-10 group hover:bg-[#0b0b0b] transition-colors"
+                  className="relative bg-ink p-8 md:p-10 group hover:bg-[#0b0b0b] transition-colors overflow-hidden min-h-[260px]"
                 >
-                  <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/40">[ {String(i + 1).padStart(2, "0")} ]</div>
-                  <div className="mt-6 font-serif text-2xl md:text-3xl leading-tight">{c.label}</div>
-                  <div className="mt-3 font-mono text-xs text-neon">{c.tag}</div>
-                  <div className="mt-8 flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/35">CERTIFIED</span>
-                    <Check size={14} className="text-neon opacity-0 group-hover:opacity-100 transition-opacity" />
+                  {/* Background logo watermark */}
+                  <img
+                    src={CRED_LOGOS[i]}
+                    alt=""
+                    aria-hidden="true"
+                    className="pointer-events-none select-none absolute -right-6 -bottom-6 w-44 h-44 md:w-52 md:h-52 object-contain opacity-[0.10] group-hover:opacity-25 transition-opacity duration-700"
+                    style={{ filter: "grayscale(100%) brightness(2)" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-ink via-ink/70 to-transparent pointer-events-none" />
+
+                  <div className="relative">
+                    <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/40">[ {String(i + 1).padStart(2, "0")} ]</div>
+                    <div className="mt-6 font-serif text-2xl md:text-3xl leading-tight">{c.label}</div>
+                    <div className="mt-3 font-mono text-xs text-neon">{c.tag}</div>
+                    <div className="mt-8 flex items-center justify-between">
+                      <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/35">CERTIFIED</span>
+                      <Check size={14} className="text-neon opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
                   </div>
                 </div>
               ))}
