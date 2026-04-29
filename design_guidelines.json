@@ -1,0 +1,75 @@
+{
+  "theme": "dark",
+  "archetype": "Noir Editorial Tech (Hybrid of Jewel & Luxury + Electric & Neon)",
+  "design_philosophy": "A sophisticated fusion of high-end editorial storytelling (Serif typography, generous negative space) with cutting-edge tech aesthetics (Dark mode, monospaced tech stats, subtle neon tracing accents). This captures the dual nature of an international executive bridging business strategy and AI innovation.",
+  "colors": {
+    "background": "#050505",
+    "surface_elevated": "#121212",
+    "surface_glass": "rgba(255, 255, 255, 0.03)",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A3A3A3",
+    "text_muted": "#525252",
+    "accent_neon": "#00F0FF",
+    "accent_hover": "#22D3EE",
+    "border_subtle": "rgba(255, 255, 255, 0.08)",
+    "border_highlight": "rgba(255, 255, 255, 0.2)"
+  },
+  "typography": {
+    "fonts": {
+      "serif": "Cormorant Garamond, serif",
+      "sans": "Manrope, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "hierarchy": {
+      "h1": "font-serif text-5xl sm:text-6xl md:text-7xl tracking-tight leading-none text-white",
+      "h2": "font-serif text-3xl sm:text-4xl md:text-5xl tracking-tight leading-tight text-white",
+      "h3": "font-serif text-2xl sm:text-3xl text-white",
+      "body": "font-sans text-base md:text-lg text-[#A3A3A3] leading-relaxed",
+      "mono_overline": "font-mono text-xs uppercase tracking-[0.2em] text-[#00F0FF]",
+      "mono_stats": "font-mono text-sm text-[#A3A3A3]"
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing (p-12 to p-32) combined with strict asymmetric grids. Break out of the standard container for high-impact editorial imagery.",
+    "grid_bento": "grid grid-cols-1 md:grid-cols-12 gap-6",
+    "container": "max-w-7xl mx-auto px-6 md:px-12"
+  },
+  "component_specs": {
+    "navbar": "Fixed top, z-50. Glassmorphism backdrop-blur-xl bg-[#050505]/60 border-b border-white/5. Must include a PT/EN toggle button (data-testid='lang-toggle'). Links in font-sans text-sm.",
+    "hero": "Asymmetrical layout. Large serif headline 'Architecting the Future' overlapping the rooftop portrait image. The image must use a dark gradient overlay (bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent) so text is perfectly readable. Neon cyan accent line (1px) used as a divider.",
+    "about": "Editorial 2-column flow. Left: the 4-grid lifestyle composite image. Right: Personal story highlighting Azcarental ownership and tech companies. Use a large drop cap or a stylized serif quote.",
+    "services": "Bento 'Control Room' grid layout for the 3 services (Innovation Consulting, AI Consulting, Digital Transformation). Cards use flat surface (#121212) with 1px subtle border. Hover effect: Border glows cyan (#00F0FF) using framer-motion or CSS transition. Bullet points in font-mono.",
+    "credentials": "A stark, minimalist grid. Do not use generic image logos; instead, build premium typographic badges using JetBrains Mono (e.g., '[ MBA @mbiusp ]', '[ @uffoficial ]', '[ IBM Certified ]', '[ Chaplain ]'). This maintains the high-end editorial tech aesthetic.",
+    "testimonials_case_studies": "Use the laptop portrait image alongside a sleek slider or grid of case study highlights. Combine serif for quotes and mono for ROI metrics.",
+    "contact_form": "Terminal-meets-luxury aesthetic. Minimalist Shadcn inputs with only a bottom border (border-b border-white/20). Focus state adds a cyan glow. Form fields: Name, Email, Service Interest (Select), Message. Save securely to MongoDB. Display contact info: +1 (619) 997-1471 / lucasa@bluegemsmgmt.com.",
+    "footer": "Massive padding (py-24). High-contrast text. Social links in monospace."
+  },
+  "image_urls": {
+    "hero_portrait": {
+      "url": "https://customer-assets.emergentagent.com/job_09576fd4-b8a5-4930-b967-b1ac5bbfce0e/artifacts/qxf5u5rw_WhatsApp%20Image%202026-04-28%20at%2018.36.35.jpeg",
+      "description": "Rooftop sunset portrait for the Hero section. Needs gradient masking to blend into the dark background."
+    },
+    "about_lifestyle": {
+      "url": "https://customer-assets.emergentagent.com/job_09576fd4-b8a5-4930-b967-b1ac5bbfce0e/artifacts/kw5rs0qt_WhatsApp%20Image%202026-04-28%20at%2018.32.59.jpeg",
+      "description": "4-grid lifestyle composite to anchor the About / Bio section."
+    },
+    "case_studies_laptop": {
+      "url": "https://customer-assets.emergentagent.com/job_09576fd4-b8a5-4930-b967-b1ac5bbfce0e/artifacts/xe0h8mj2_WhatsApp%20Image%202026-04-28%20at%2018.32.55.jpeg",
+      "description": "Laptop professional indoor image. Use in the Case Studies or Contact Section to build trust."
+    }
+  },
+  "animations": {
+    "scroll": "Implement Lenis for smooth momentum scrolling.",
+    "entrances": "Framer Motion staggered fade-up (y: 30, opacity: 0 -> 1) on scroll.",
+    "interactions": "Interactive elements must scale down slightly on active/click. Use the 'Tracing Beam' effect for high-tier service cards."
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the Dark Theme. Use #050505 for background, NEVER pure white background anywhere.",
+    "Ensure 'Cormorant Garamond' (headings), 'Manrope' (body), and 'JetBrains Mono' (tech/data) are properly imported from Google Fonts.",
+    "Bilingual toggle is a core requirement. Build a centralized dictionary/state for PT and EN strings and dynamically switch them via the navbar toggle.",
+    "Use pure HTML/Tailwind for creative, overlapping layouts in marketing sections. Only use Shadcn UI primitives for the Contact Form, Selects, or Dialogs. Do not trap the main layout in rigid Shadcn Cards.",
+    "All interactive elements (buttons, form inputs, language toggle) MUST have descriptive 'data-testid' attributes.",
+    "Implement the Contact API route using Mongoose/MongoDB to save incoming consultation requests.",
+    "Display the exact requested contact details: '+1 (619) 997-1471' and 'lucasa@bluegemsmgmt.com' clearly in the footer or contact section."
+  ]
+}
