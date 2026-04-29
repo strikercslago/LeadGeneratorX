@@ -227,7 +227,7 @@ function About({ t }) {
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-5 reveal">
             <div ref={imgRef} className="relative aspect-square w-full will-change-transform">
-              <img src={PORTRAIT_LIFESTYLE} alt="Lucas Azaro lifestyle" className="absolute inset-0 w-full h-full object-cover rounded-sm" style={{ objectPosition: "center 30%" }} />
+              <img src={PORTRAIT_LIFESTYLE} alt="Lucas Azaro lifestyle" className="absolute inset-0 w-full h-full object-cover rounded-sm" style={{ objectPosition: "center top" }} />
               <div className="absolute inset-0 ring-1 ring-white/10 rounded-sm pointer-events-none" />
               <div className="absolute -bottom-3 -right-3 font-mono text-[10px] tracking-[0.25em] uppercase text-white/55 bg-ink px-3 py-1.5 border border-white/10">
                 @lucasazaro · 2026
@@ -362,10 +362,9 @@ function Credentials({ t }) {
                     src={CRED_LOGOS[i]}
                     alt=""
                     aria-hidden="true"
-                    className="pointer-events-none select-none absolute -right-6 -bottom-6 w-44 h-44 md:w-52 md:h-52 object-contain opacity-[0.10] group-hover:opacity-25 transition-opacity duration-700"
-                    style={{ filter: "grayscale(100%) brightness(2)" }}
+                    className="pointer-events-none select-none absolute -right-4 -bottom-4 w-48 h-48 md:w-56 md:h-56 object-contain opacity-60 group-hover:opacity-90 transition-opacity duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-ink via-ink/70 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-ink via-ink/60 to-transparent pointer-events-none" />
 
                   <div className="relative">
                     <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/40">[ {String(i + 1).padStart(2, "0")} ]</div>
