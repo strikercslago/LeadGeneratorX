@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DICT, SERVICE_VALUES } from "@/i18n";
 import useReveal from "@/lib/useReveal";
+import useParallax from "@/lib/useParallax";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -89,9 +90,12 @@ function Nav({ lang, setLang, t }) {
 
 /* --------------------------------- Hero -------------------------------- */
 function Hero({ t }) {
+  const dotsRef = useParallax(-0.35);
+  const portraitRef = useParallax(0.12);
+  const marqueeRef = useParallax(-0.15);
   return (
     <section id="top" data-testid="hero-section" className="relative min-h-screen pt-32 pb-20 overflow-hidden grain-overlay">
-      <div className="absolute inset-0 dot-grid opacity-50 pointer-events-none" />
+      <div ref={dotsRef} className="absolute inset-0 dot-grid opacity-50 pointer-events-none will-change-transform" />
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 reveal">
@@ -141,7 +145,7 @@ function Hero({ t }) {
           </div>
 
           <div className="lg:col-span-5 relative reveal">
-            <div className="relative aspect-[4/5] w-full max-w-md ml-auto">
+            <div ref={portraitRef} className="relative aspect-[4/5] w-full max-w-md ml-auto will-change-transform">
               <div className="absolute -inset-4 border border-white/10 rounded-sm pointer-events-none" />
               <div className="absolute -inset-2 border border-neon/30 rounded-sm pointer-events-none" style={{ transform: "translate(8px, 8px)" }} />
               <img
@@ -159,7 +163,7 @@ function Hero({ t }) {
         </div>
 
         {/* marquee */}
-        <div className="mt-24 border-y border-white/10 py-5 overflow-hidden">
+        <div ref={marqueeRef} className="mt-24 border-y border-white/10 py-5 overflow-hidden will-change-transform">
           <div className="flex marquee-track gap-12 whitespace-nowrap">
             {[...Array(2)].flatMap((_, k) =>
               ["INNOVATION", "ARTIFICIAL INTELLIGENCE", "DIGITAL TRANSFORMATION", "NEGOTIATION", "AZCARENTAL", "GenAI · IBM"].map((w, i) => (
@@ -175,8 +179,38 @@ function Hero({ t }) {
   );
 }
 
+/* --------------------- Parallax cinematic window ----------------------- */
+function ParallaxWindow({ t }) {
+  return (
+    <section data-testid="parallax-window" aria-hidden="true" className="relative h-[60vh] md:h-[80vh] overflow-hidden border-y border-white/5">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${PORTRAIT_LIFESTYLE})`,
+          backgroundAttachment: "fixed",
+          filter: "grayscale(20%) contrast(0.95)",
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/55 to-ink" />
+      <div className="absolute inset-0 dot-grid opacity-40" />
+      <div className="relative h-full max-w-7xl mx-auto px-6 md:px-12 flex items-center">
+        <div className="max-w-3xl">
+          <p className="font-mono text-[11px] tracking-[0.3em] text-neon">[ INTERLUDE ]</p>
+          <p className="mt-6 font-serif italic text-3xl sm:text-4xl md:text-6xl leading-[1.05] tracking-tight text-white/90 text-balance">
+            {t.about.title_pre}{" "}
+            <em className="not-italic text-neon">{t.about.title_em}</em>{" "}
+            <span className="text-white/55">— {t.about.tag1} · {t.about.tag2} · {t.about.tag3}.</span>
+          </p>
+          <div className="mt-10 h-px w-24 bg-neon/70" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* --------------------------------- About ------------------------------- */
 function About({ t }) {
+  const imgRef = useParallax(0.18);
   return (
     <section id="about" data-testid="about-section" className="relative py-28 md:py-40">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -184,7 +218,7 @@ function About({ t }) {
 
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-5 reveal">
-            <div className="relative aspect-square w-full">
+            <div ref={imgRef} className="relative aspect-square w-full will-change-transform">
               <img src={PORTRAIT_LIFESTYLE} alt="Lucas Azaro lifestyle" className="absolute inset-0 w-full h-full object-cover rounded-sm" />
               <div className="absolute inset-0 ring-1 ring-white/10 rounded-sm pointer-events-none" />
               <div className="absolute -bottom-3 -right-3 font-mono text-[10px] tracking-[0.25em] uppercase text-white/55 bg-ink px-3 py-1.5 border border-white/10">
@@ -326,6 +360,7 @@ function Credentials({ t }) {
 
 /* -------------------------------- Cases -------------------------------- */
 function Cases({ t }) {
+  const laptopRef = useParallax(0.16);
   return (
     <section id="cases" data-testid="cases-section" className="relative py-28 md:py-40 border-t border-white/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -345,7 +380,7 @@ function Cases({ t }) {
           </div>
 
           <div className="lg:col-span-5 reveal">
-            <div className="relative h-full min-h-[360px]">
+            <div ref={laptopRef} className="relative h-full min-h-[360px] will-change-transform">
               <img
                 src={PORTRAIT_LAPTOP}
                 alt="Lucas Azaro at work"
@@ -569,6 +604,7 @@ export default function App() {
       <main>
         <Hero t={t} />
         <About t={t} />
+        <ParallaxWindow t={t} />
         <Services t={t} />
         <Credentials t={t} />
         <Cases t={t} />
