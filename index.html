@@ -523,5 +523,191 @@
     </div>
   </template>
 
+
+  <script>
+    // ── DOM refs ──
+    const dropZone     = document.getElementById('drop-zone');
+    const fileInput    = document.getElementById('file-input');
+    const fileNameEl   = document.getElementById('file-name');
+    const btnProcessar = document.getElementById('btn-processar');
+    const statsBar     = document.getElementById('stats-bar');
+    const leadsSection = document.getElementById('leads-section');
+    const leadsList    = document.getElementById('leads-list');
+    const emptyState   = document.getElementById('empty-state');
+    const statTotal    = document.getElementById('stat-total');
+    const statComSite  = document.getElementById('stat-com-site');
+    const statSemSite  = document.getElementById('stat-sem-site');
+    const template     = document.getElementById('lead-card-template');
+
+    let csvFile = null;
+
+    // ── Drag & drop ──
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const f = e.dataTransfer.files[0];
+      if (f) setFile(f);
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) setFile(fileInput.files[0]);
+    });
+
+    function setFile(f) {
+      csvFile = f;
+      fileNameEl.textContent = f.name;
+      btnProcessar.disabled = false;
+    }
+
+    btnProcessar.addEventListener('click', () => {
+      if (!csvFile) return;
+      const reader = new FileReader();
+      reader.onload = e => processCSV(e.target.result);
+      reader.readAsText(csvFile, 'UTF-8');
+    });
+
+    // ── CSV parser ──
+    function parseCSV(text) {
+      const lines = text.split(/\r?\n/).filter(l => l.trim());
+      if (lines.length < 2) return [];
+
+      const headers = splitCSVLine(lines[0]);
+
+      return lines.slice(1).map(line => {
+        const cols = splitCSVLine(line);
+        const row = {};
+        headers.forEach((h, i) => { row[h.trim()] = (cols[i] || '').trim(); });
+        return row;
+      }).filter(r => Object.values(r).some(v => v)); // skip blank rows
+    }
+
+    function splitCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQuotes && line[i + 1] === '"') { current += '"'; i++; }
+          else inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+          result.push(current);
+          current = '';
+        } else {
+          current += ch;
+        }
+      }
+      result.push(current);
+      return result;
+    }
+
+    // ── Process ──
+    function processCSV(text) {
+      const rows = parseCSV(text);
+      const total = rows.length;
+      const leads = rows.filter(r => !r.data11 || r.data11.trim() !== 'Website');
+      const comSite = total - leads.length;
+
+      // Stats
+      statTotal.textContent   = total;
+      statComSite.textContent = comSite;
+      statSemSite.textContent = leads.length;
+      statsBar.classList.add('visible');
+
+      // Render leads
+      leadsList.innerHTML = '';
+      leadsSection.classList.add('visible');
+
+      if (leads.length === 0) {
+        emptyState.classList.add('visible');
+        return;
+      }
+
+      emptyState.classList.remove('visible');
+      leads.forEach(lead => leadsList.appendChild(buildCard(lead)));
+    }
+
+    // ── Rating helpers ──
+    function parseRating(raw) {
+      if (!raw) return null;
+      const match = raw.match(/([\d,\.]+)\((\d+)\)/);
+      if (!match) return null;
+      return {
+        score: parseFloat(match[1].replace(',', '.')),
+        count: parseInt(match[2], 10),
+      };
+    }
+
+    function ratingBadge(raw) {
+      const r = parseRating(raw);
+      if (!r) return null;
+      const isHigh = r.score >= 4.5;
+      const badge = document.createElement('span');
+      badge.className = 'badge ' + (isHigh ? 'badge-rating-high' : 'badge-rating-low');
+      badge.textContent = `★ ${r.score.toFixed(1)} (${r.count})`;
+      return badge;
+    }
+
+    // ── Phone formatter ──
+    function formatarNumero(tel) {
+      if (!tel) return null;
+      const digits = tel.replace(/\D/g, '');
+      if (!digits) return null;
+      return digits.startsWith('55') ? digits : '55' + digits;
+    }
+
+    // ── Build card ──
+    function buildCard(lead) {
+      const name   = lead.data  || '(sem nome)';
+      const tipo   = lead.data2 || '';
+      const phone  = lead.data8 || '';
+      const rating = lead.data14 || '';
+
+      const clone = template.content.cloneNode(true);
+      const card  = clone.querySelector('.lead-card');
+
+      // Avatar: first letter
+      card.querySelector('.lead-avatar').textContent = name.charAt(0).toUpperCase();
+
+      // Name
+      card.querySelector('.lead-name').textContent = name;
+
+      // Badges
+      const meta = card.querySelector('.lead-meta');
+
+      const rb = ratingBadge(rating);
+      if (rb) meta.appendChild(rb);
+
+      if (tipo) {
+        const tb = document.createElement('span');
+        tb.className = 'badge badge-type';
+        tb.textContent = tipo;
+        meta.appendChild(tb);
+      }
+
+      if (phone) {
+        const pb = document.createElement('span');
+        pb.className = 'badge badge-phone';
+        pb.textContent = phone;
+        meta.appendChild(pb);
+      }
+
+      // Phone-less warning
+      const numero = formatarNumero(phone);
+      const noPhone = card.querySelector('.no-phone-notice');
+      if (!numero) noPhone.style.display = 'inline';
+
+      // Store lead data on card for Etapa 3
+      card.dataset.name   = name;
+      card.dataset.tipo   = tipo;
+      card.dataset.rating = rating;
+      card.dataset.numero = numero || '';
+
+      return card;
+    }
+  </script>
+
 </body>
 </html>
