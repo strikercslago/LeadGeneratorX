@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadGeneratorX — WhatsApp Leads</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f6fa;
+      --surface: #ffffff;
+      --border: #e2e5ed;
+      --text: #1a1d27;
+      --muted: #6b7280;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --green: #16a34a;
+      --green-hover: #15803d;
+      --green-light: #dcfce7;
+      --yellow-light: #fef9c3;
+      --yellow: #ca8a04;
+      --gray-light: #f3f4f6;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    header .logo-icon svg { width: 18px; height: 18px; fill: #fff; }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+
+    header span {
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 4px;
+      font-weight: 400;
+    }
+
+    /* ── Main ── */
+    main {
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* ── Upload section ── */
+    #upload-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    #upload-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    #upload-section p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    #drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 48px 24px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+
+    #drop-zone:hover,
+    #drop-zone.dragover {
+      border-color: var(--primary);
+      background: #f5f3ff;
+    }
+
+    #drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    #drop-zone .drop-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--gray-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    #drop-zone .drop-icon svg { width: 24px; height: 24px; color: var(--muted); }
+
+    #drop-zone strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    #drop-zone .drop-hint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    #file-name {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 500;
+      min-height: 20px;
+    }
+
+    #btn-processar {
+      margin-top: 24px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 32px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+
+    #btn-processar:hover { background: var(--primary-hover); }
+    #btn-processar:active { transform: scale(.98); }
+    #btn-processar:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── Stats bar ── */
+    #stats-bar {
+      display: none;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    #stats-bar.visible { display: flex; flex-wrap: wrap; }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+      padding: 16px 20px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .stat-card .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-card.highlight .stat-value { color: var(--primary); }
+
+    /* ── Leads section ── */
+    #leads-section { display: none; }
+    #leads-section.visible { display: block; }
+
+    #leads-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    /* ── Lead card ── */
+    .lead-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      transition: box-shadow .2s;
+    }
+
+    .lead-card:hover { box-shadow: var(--shadow-md); }
+
+    .lead-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .lead-avatar {
+      width: 42px;
+      height: 42px;
+      background: var(--gray-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .lead-info { flex: 1; min-width: 0; }
+
+    .lead-name {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lead-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+
+    .badge-rating-high { background: var(--green-light); color: var(--green); }
+    .badge-rating-low  { background: var(--gray-light);  color: var(--muted); }
+    .badge-type        { background: #ede9fe; color: #6d28d9; }
+    .badge-phone       { background: var(--gray-light);  color: var(--muted); }
+
+    .lead-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-gerar {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-gerar:hover { background: var(--primary-hover); }
+    .btn-gerar:disabled { opacity: .5; cursor: not-allowed; }
+
+    .btn-whatsapp {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background .2s;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .btn-whatsapp.visible { display: inline-flex; }
+    .btn-whatsapp:hover { background: var(--green-hover); }
+
+    .btn-copiar {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-copiar.visible { display: inline-flex; }
+    .btn-copiar:hover { color: var(--text); border-color: #9ca3af; }
+
+    .no-phone-notice {
+      font-size: 12px;
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    /* ── Message area ── */
+    .message-area {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .message-area.visible { display: block; }
+
+    .message-area textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      resize: vertical;
+      min-height: 140px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .message-area textarea:focus { border-color: var(--primary); }
+
+    /* ── Loading spinner ── */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    .spinner.dark {
+      border-color: rgba(79,70,229,.3);
+      border-top-color: var(--primary);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Empty state ── */
+    #empty-state {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--muted);
+    }
+
+    #empty-state.visible { display: block; }
+    #empty-state p { font-size: 15px; margin-top: 12px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      main { margin: 24px auto; }
+      #upload-section { padding: 28px 20px; }
+      .lead-card { padding: 16px 18px; }
+      .lead-name { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/>
+      </svg>
+    </div>
+    <h1>LeadGeneratorX <span>— WhatsApp Leads</span></h1>
+  </header>
+
+  <main>
+
+    <!-- Upload -->
+    <section id="upload-section">
+      <h2>Importe sua lista do Google Maps</h2>
+      <p>Faça upload do arquivo CSV exportado pelo seu web scraper e gere mensagens personalizadas para cada lead sem site.</p>
+
+      <div id="drop-zone">
+        <input type="file" id="file-input" accept=".csv" />
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <strong>Arraste o arquivo CSV aqui</strong>
+        <span class="drop-hint">ou clique para selecionar do computador</span>
+      </div>
+
+      <div id="file-name"></div>
+      <button id="btn-processar" disabled>Processar lista</button>
+    </section>
+
+    <!-- Stats -->
+    <div id="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Total de registros</div>
+        <div class="stat-value" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Com site</div>
+        <div class="stat-value" id="stat-com-site">0</div>
+      </div>
+      <div class="stat-card highlight">
+        <div class="stat-label">Sem site (leads)</div>
+        <div class="stat-value" id="stat-sem-site">0</div>
+      </div>
+    </div>
+
+    <!-- Leads list -->
+    <section id="leads-section">
+      <h2>Leads sem site</h2>
+      <div id="leads-list"></div>
+      <div id="empty-state">
+        <p>Nenhum lead sem site encontrado neste arquivo.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lead card template (hidden, cloned by JS) -->
+  <template id="lead-card-template">
+    <div class="lead-card">
+      <div class="lead-header">
+        <div class="lead-avatar"></div>
+        <div class="lead-info">
+          <div class="lead-name"></div>
+          <div class="lead-meta">
+            <!-- badges inserted by JS -->
+          </div>
+        </div>
+      </div>
+      <div class="lead-actions">
+        <button class="btn-gerar">
+          <span class="spinner"></span>
+          <span class="btn-gerar-label">Gerar mensagem</span>
+        </button>
+        <a class="btn-whatsapp" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.862L.057 23.737a.75.75 0 00.921.921l5.875-1.475A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.659-.523-5.168-1.432l-.361-.214-3.737.938.938-3.737-.214-.361A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+          </svg>
+          Abrir no WhatsApp
+        </a>
+        <button class="btn-copiar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copiar
+        </button>
+        <span class="no-phone-notice" style="display:none">Sem telefone cadastrado</span>
+      </div>
+      <div class="message-area">
+        <textarea rows="6" placeholder="A mensagem gerada pela IA vai aparecer aqui..."></textarea>
+      </div>
+    </div>
+  </template>
+
+</body>
+</html>
