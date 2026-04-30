@@ -432,7 +432,7 @@
         <div class="stat-label">Total de registros</div>
         <div class="stat-value" id="stat-total">0</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" id="stat-com-site-card">
         <div class="stat-label">Com site</div>
         <div class="stat-value" id="stat-com-site">0</div>
       </div>
@@ -568,20 +568,39 @@
       return result;
     }
 
+    // ── Detect CSV format ──
+    // Novo formato: colunas Nome, Telefone, Avaliação, Mensagem, Link WhatsApp (já filtrado)
+    // Formato legado: colunas data, data2, data8, data11, data14
+    function detectFormat(rows) {
+      if (!rows.length) return 'legacy';
+      return ('Nome' in rows[0]) ? 'novo' : 'legacy';
+    }
+
     // ── Process ──
     function processCSV(text) {
       const rows = parseCSV(text);
-      const total = rows.length;
-      const leads = rows.filter(r => !r.data11 || r.data11.trim() !== 'Website');
-      const comSite = total - leads.length;
+      if (!rows.length) return;
 
-      // Stats
-      statTotal.textContent   = total;
-      statComSite.textContent = comSite;
-      statSemSite.textContent = leads.length;
+      const formato = detectFormat(rows);
+      let leads;
+
+      if (formato === 'novo') {
+        // CSV já vem filtrado e enriquecido
+        leads = rows;
+        statTotal.textContent   = leads.length;
+        statComSite.textContent = '—';
+        statSemSite.textContent = leads.length;
+      } else {
+        // Formato legado: filtra quem não tem site
+        const total = rows.length;
+        leads = rows.filter(r => !r.data11 || r.data11.trim() !== 'Website');
+        statTotal.textContent   = total;
+        statComSite.textContent = total - leads.length;
+        statSemSite.textContent = leads.length;
+      }
+
+      document.getElementById('stat-com-site-card').style.display = formato === 'novo' ? 'none' : '';
       statsBar.classList.add('visible');
-
-      // Render leads
       leadsList.innerHTML = '';
       leadsSection.classList.add('visible');
 
@@ -591,12 +610,12 @@
       }
 
       emptyState.classList.remove('visible');
-      leads.forEach(lead => leadsList.appendChild(buildCard(lead)));
+      leads.forEach(lead => leadsList.appendChild(buildCard(lead, formato)));
     }
 
     // ── Rating helpers ──
     function parseRating(raw) {
-      if (!raw) return null;
+      if (!raw || raw === 'Nenhuma avaliação') return null;
       const match = raw.match(/([\d,\.]+)\((\d+)\)/);
       if (!match) return null;
       return {
@@ -624,34 +643,25 @@
     }
 
     // ── Build card ──
-    function buildCard(lead) {
-      const name     = lead.data     || '(sem nome)';
-      const tipo     = lead.data2    || '';
-      const phone    = lead.data8    || '';
-      const rating   = lead.data14   || '';
-      const mensagem = lead.mensagem || '';
+    function buildCard(lead, formato) {
+      const isNovo = formato === 'novo';
+
+      const name     = isNovo ? (lead['Nome']      || '(sem nome)') : (lead.data  || '(sem nome)');
+      const phone    = isNovo ? (lead['Telefone']   || '')           : (lead.data8 || '');
+      const rating   = isNovo ? (lead['Avaliação']  || '')           : (lead.data14 || '');
+      const mensagem = isNovo ? (lead['Mensagem']   || '')           : (lead.mensagem || '');
+      const waLink   = isNovo ? (lead['Link WhatsApp'] || '')        : '';
 
       const clone = template.content.cloneNode(true);
       const card  = clone.querySelector('.lead-card');
 
-      // Avatar
       card.querySelector('.lead-avatar').textContent = name.charAt(0).toUpperCase();
-
-      // Name
       card.querySelector('.lead-name').textContent = name;
 
-      // Badges
       const meta = card.querySelector('.lead-meta');
 
       const rb = ratingBadge(rating);
       if (rb) meta.appendChild(rb);
-
-      if (tipo) {
-        const tb = document.createElement('span');
-        tb.className = 'badge badge-type';
-        tb.textContent = tipo;
-        meta.appendChild(tb);
-      }
 
       if (phone) {
         const pb = document.createElement('span');
@@ -660,21 +670,25 @@
         meta.appendChild(pb);
       }
 
-      // Phone
-      const numero = formatarNumero(phone);
-      if (!numero) card.querySelector('.no-phone-notice').style.display = 'inline';
+      const hasPhone = !!phone.replace(/\D/g, '');
+      if (!hasPhone) card.querySelector('.no-phone-notice').style.display = 'inline';
 
-      // Message
       const textarea = card.querySelector('textarea');
       const btnWa    = card.querySelector('.btn-whatsapp');
       const btnCopy  = card.querySelector('.btn-copiar');
 
+      card.querySelector('.message-area').classList.add('visible');
+
       if (mensagem) {
         textarea.value = mensagem;
-        card.querySelector('.message-area').classList.add('visible');
 
-        if (numero) {
-          btnWa.href = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+        // Usa link pronto do CSV se existir, senão monta na hora
+        const linkFinal = waLink || (hasPhone
+          ? `https://wa.me/${formatarNumero(phone)}?text=${encodeURIComponent(mensagem)}`
+          : '');
+
+        if (linkFinal) {
+          btnWa.href = linkFinal;
           btnWa.classList.add('visible');
         }
 
@@ -688,15 +702,15 @@
           });
         });
 
-        // Keep WhatsApp link updated if user edits the textarea
-        if (numero) {
+        // Atualiza link se usuário editar a mensagem
+        if (hasPhone) {
+          const numero = formatarNumero(phone);
           textarea.addEventListener('input', () => {
             btnWa.href = `https://wa.me/${numero}?text=${encodeURIComponent(textarea.value)}`;
           });
         }
       } else {
         card.classList.add('sem-mensagem');
-        card.querySelector('.message-area').classList.add('visible');
       }
 
       return card;
