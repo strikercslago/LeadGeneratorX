@@ -295,25 +295,6 @@
       flex-wrap: wrap;
     }
 
-    .btn-gerar {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 9px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background .2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-gerar:hover { background: var(--primary-hover); }
-    .btn-gerar:disabled { opacity: .5; cursor: not-allowed; }
-
     .btn-whatsapp {
       background: var(--green);
       color: #fff;
@@ -353,6 +334,12 @@
     .btn-copiar.visible { display: inline-flex; }
     .btn-copiar:hover { color: var(--text); border-color: #9ca3af; }
 
+    /* ── Sem mensagem: textarea apagada ── */
+    .lead-card.sem-mensagem .message-area textarea {
+      color: var(--muted);
+      font-style: italic;
+    }
+
     .no-phone-notice {
       font-size: 12px;
       color: #ef4444;
@@ -383,24 +370,6 @@
     }
 
     .message-area textarea:focus { border-color: var(--primary); }
-
-    /* ── Loading spinner ── */
-    .spinner {
-      display: none;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-    }
-
-    .spinner.dark {
-      border-color: rgba(79,70,229,.3);
-      border-top-color: var(--primary);
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── Empty state ── */
     #empty-state {
@@ -497,10 +466,6 @@
         </div>
       </div>
       <div class="lead-actions">
-        <button class="btn-gerar">
-          <span class="spinner"></span>
-          <span class="btn-gerar-label">Gerar mensagem</span>
-        </button>
         <a class="btn-whatsapp" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
@@ -518,7 +483,7 @@
         <span class="no-phone-notice" style="display:none">Sem telefone cadastrado</span>
       </div>
       <div class="message-area">
-        <textarea rows="6" placeholder="A mensagem gerada pela IA vai aparecer aqui..."></textarea>
+        <textarea rows="6" placeholder="Sem mensagem neste CSV. Envie o arquivo para o Claude gerar as mensagens."></textarea>
       </div>
     </div>
   </template>
@@ -660,15 +625,16 @@
 
     // ── Build card ──
     function buildCard(lead) {
-      const name   = lead.data  || '(sem nome)';
-      const tipo   = lead.data2 || '';
-      const phone  = lead.data8 || '';
-      const rating = lead.data14 || '';
+      const name     = lead.data     || '(sem nome)';
+      const tipo     = lead.data2    || '';
+      const phone    = lead.data8    || '';
+      const rating   = lead.data14   || '';
+      const mensagem = lead.mensagem || '';
 
       const clone = template.content.cloneNode(true);
       const card  = clone.querySelector('.lead-card');
 
-      // Avatar: first letter
+      // Avatar
       card.querySelector('.lead-avatar').textContent = name.charAt(0).toUpperCase();
 
       // Name
@@ -694,16 +660,44 @@
         meta.appendChild(pb);
       }
 
-      // Phone-less warning
+      // Phone
       const numero = formatarNumero(phone);
-      const noPhone = card.querySelector('.no-phone-notice');
-      if (!numero) noPhone.style.display = 'inline';
+      if (!numero) card.querySelector('.no-phone-notice').style.display = 'inline';
 
-      // Store lead data on card for Etapa 3
-      card.dataset.name   = name;
-      card.dataset.tipo   = tipo;
-      card.dataset.rating = rating;
-      card.dataset.numero = numero || '';
+      // Message
+      const textarea = card.querySelector('textarea');
+      const btnWa    = card.querySelector('.btn-whatsapp');
+      const btnCopy  = card.querySelector('.btn-copiar');
+
+      if (mensagem) {
+        textarea.value = mensagem;
+        card.querySelector('.message-area').classList.add('visible');
+
+        if (numero) {
+          btnWa.href = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+          btnWa.classList.add('visible');
+        }
+
+        btnCopy.classList.add('visible');
+        btnCopy.addEventListener('click', () => {
+          navigator.clipboard.writeText(textarea.value).then(() => {
+            const label = btnCopy.lastChild;
+            const original = label.textContent;
+            label.textContent = 'Copiado!';
+            setTimeout(() => { label.textContent = original; }, 2000);
+          });
+        });
+
+        // Keep WhatsApp link updated if user edits the textarea
+        if (numero) {
+          textarea.addEventListener('input', () => {
+            btnWa.href = `https://wa.me/${numero}?text=${encodeURIComponent(textarea.value)}`;
+          });
+        }
+      } else {
+        card.classList.add('sem-mensagem');
+        card.querySelector('.message-area').classList.add('visible');
+      }
 
       return card;
     }
