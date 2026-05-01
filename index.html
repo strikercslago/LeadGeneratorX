@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Criativa – Estúdio de Arte Infantil em Passo Fundo</title>
+  <meta name="description" content="Casa Criativa é um estúdio de arte infantil em Passo Fundo, RS. Aulas de pintura, atividades em grupo, festas e workshops para crianças e jovens." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:   #E91E8C;
+      --purple: #7B3FA0;
+      --blue:   #5B8FD4;
+      --orange: #FF6B2B;
+      --yellow: #FFD93D;
+      --white:  #FFFFFF;
+      --dark:   #1A1A2E;
+      --light-bg: #FFF9F5;
+      --card-radius: 20px;
+      --transition: .35s cubic-bezier(.25,.8,.25,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--light-bg);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Baloo 2', sans-serif; line-height: 1.2; }
+
+    img { display: block; max-width: 100%; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* =============================================
+       SCROLLBAR
+    ============================================= */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f0e6ff; }
+    ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+    /* =============================================
+       NAVBAR
+    ============================================= */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      padding: 14px 0;
+      transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
+    }
+
+    #navbar.scrolled {
+      background: rgba(255,255,255,.97);
+      box-shadow: 0 4px 30px rgba(123,63,160,.15);
+      padding: 10px 0;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(233,30,140,.35);
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      color: var(--dark);
+      transition: all var(--transition);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--orange), var(--yellow)) !important;
+      color: var(--dark) !important;
+      font-weight: 700 !important;
+      padding: 8px 20px !important;
+      box-shadow: 0 4px 15px rgba(255,107,43,.3);
+    }
+
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,43,.45) !important; }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px; height: 3px;
+      background: var(--purple);
+      border-radius: 3px;
+      transition: all var(--transition);
+    }
+
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,6px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-6px); }
+
+    /* mobile nav */
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        inset: 0; top: 68px;
+        background: rgba(255,255,255,.98);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        transform: translateX(100%);
+        transition: transform var(--transition);
+        backdrop-filter: blur(10px);
+      }
+      .nav-links.open { transform: translateX(0); }
+      .nav-links a { font-size: 20px; }
+      .hamburger { display: flex; }
+    }
+
+    /* =============================================
+       DECORATIVE DOTS
+    ============================================= */
+    .dots-bg {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(123,63,160,.08) 1.5px, transparent 1.5px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    /* =============================================
+       SECTION WAVE DIVIDERS
+    ============================================= */
+    .wave-divider {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      display: block;
+    }
+    .wave-divider svg { display: block; width: 100%; height: 80px; }
+
+    /* =============================================
+       FADE-IN ANIMATION (Intersection Observer)
+    ============================================= */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    .fade-in-left { opacity: 0; transform: translateX(-40px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-in-left.visible { opacity: 1; transform: translateX(0); }
+
+    .fade-in-right { opacity: 0; transform: translateX(40px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-in-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    #home {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(145deg, #FFF0F8 0%, #F0E6FF 40%, #E6F0FF 100%);
+    }
+
+    .hero-blobs {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: .35;
+      animation: blobFloat 8s ease-in-out infinite;
+    }
+
+    .blob-1 { width: 500px; height: 500px; background: var(--pink); top: -100px; right: -100px; animation-delay: 0s; }
+    .blob-2 { width: 400px; height: 400px; background: var(--yellow); bottom: -80px; left: 30%; animation-delay: 2s; }
+    .blob-3 { width: 300px; height: 300px; background: var(--blue); top: 30%; left: -80px; animation-delay: 4s; }
+    .blob-4 { width: 250px; height: 250px; background: var(--orange); bottom: 10%; right: 10%; animation-delay: 3s; }
+
+    @keyframes blobFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -30px) scale(1.05); }
+      66% { transform: translate(-15px, 15px) scale(.95); }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(233,30,140,.12);
+      border: 1.5px solid rgba(233,30,140,.25);
+      color: var(--pink);
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    .hero-badge i { font-size: 16px; }
+
+    .hero-title {
+      font-size: clamp(36px, 5vw, 62px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--pink), var(--purple), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #4a4a6a;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      padding: 16px 32px;
+      border-radius: 50px;
+      box-shadow: 0 8px 30px rgba(233,30,140,.4);
+      transition: all var(--transition);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.2), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(233,30,140,.55); }
+    .btn-primary:hover::after { opacity: 1; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,.8);
+      color: var(--dark);
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      padding: 14px 30px;
+      border-radius: 50px;
+      border: 2px solid rgba(123,63,160,.2);
+      backdrop-filter: blur(10px);
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover { background: #fff; border-color: var(--purple); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,.1); }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item { text-align: left; }
+
+    .stat-number {
+      font-family: 'Fredoka One', cursive;
+      font-size: 36px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #6b6b8a;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-mosaic {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 14px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .mosaic-img {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.15);
+      transition: transform var(--transition);
+    }
+
+    .mosaic-img:hover { transform: scale(1.03) rotate(-1deg); }
+
+    .mosaic-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mosaic-img:nth-child(1) { grid-row: 1 / 3; height: 320px; }
+    .mosaic-img:nth-child(2) { height: 150px; }
+    .mosaic-img:nth-child(3) { height: 155px; }
+
+    .hero-float-badge {
+      position: absolute;
+      background: #fff;
+      border-radius: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--dark);
+      animation: floatBadge 4s ease-in-out infinite;
+      z-index: 5;
+    }
+
+    .hero-float-badge-1 { top: 20px; right: -20px; }
+    .hero-float-badge-2 { bottom: 30px; left: -20px; animation-delay: 2s; }
+
+    .float-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .float-icon-pink { background: linear-gradient(135deg, #ffd6ea, #ffb3d9); }
+    .float-icon-yellow { background: linear-gradient(135deg, #fff3b0, #ffe066); }
+
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+      .hero-subtitle { max-width: 100%; margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-mosaic { max-width: 380px; margin: 0 auto; }
+      .hero-float-badge-1 { right: 0; }
+      .hero-float-badge-2 { left: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-mosaic { grid-template-columns: 1fr; grid-template-rows: auto; max-width: 300px; }
+      .mosaic-img:nth-child(1) { grid-row: auto; height: 220px; }
+      .mosaic-img:nth-child(2), .mosaic-img:nth-child(3) { display: none; }
+      .hero-float-badge { display: none; }
+    }
+
+    /* =============================================
+       SECTION COMMON
+    ============================================= */
+    section { position: relative; }
+
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      color: #5a5a7a;
+      line-height: 1.7;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* =============================================
+       SOBRE / ABOUT
+    ============================================= */
+    #sobre {
+      padding: 100px 0;
+      background: #fff;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-img-wrap {
+      position: relative;
+    }
+
+    .about-main-img {
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(123,63,160,.2);
+    }
+
+    .about-main-img img { width: 100%; height: 420px; object-fit: cover; }
+
+    .about-accent {
+      position: absolute;
+      width: 160px; height: 160px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.15);
+      border: 5px solid #fff;
+    }
+
+    .about-accent-1 { bottom: -30px; right: -30px; }
+    .about-accent-2 { top: -20px; left: -20px; width: 120px; height: 120px; }
+
+    .about-accent img { width: 100%; height: 100%; object-fit: cover; }
+
+    .about-deco-circle {
+      position: absolute;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      opacity: .25;
+      top: -30px; right: 20px;
+    }
+
+    .about-content .section-header { text-align: left; margin-bottom: 28px; }
+    .about-content .section-subtitle { max-width: 100%; margin: 0; text-align: left; }
+
+    .about-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #4a4a6a;
+      margin: 20px 0 32px;
+    }
+
+    .about-values {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .value-card {
+      background: var(--light-bg);
+      border-radius: 16px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .value-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(123,63,160,.12); }
+
+    .value-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .value-card h4 { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .value-card p { font-size: 13px; color: #6b6b8a; line-height: 1.5; }
+
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 50px; }
+      .about-content .section-header { text-align: center; }
+      .about-content .section-subtitle { margin: 0 auto; text-align: center; }
+      .about-text { text-align: center; }
+      .about-values { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .about-values { grid-template-columns: 1fr; }
+      .about-accent { display: none; }
+    }
+
+    /* =============================================
+       SERVICES
+    ============================================= */
+    #servicos {
+      padding: 100px 0;
+      background: linear-gradient(160deg, #FFF5FB 0%, #F5EEFF 50%, #EEF4FF 100%);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
+
+    .service-card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 36px 28px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      transition: height var(--transition);
+    }
+
+    .service-card:hover { transform: translateY(-10px); }
+    .service-card:hover::before { height: 6px; }
+
+    .service-card.card-pink::before { background: linear-gradient(90deg, var(--pink), #ff8cc8); }
+    .service-card.card-pink:hover { box-shadow: 0 20px 60px rgba(233,30,140,.2); }
+
+    .service-card.card-purple::before { background: linear-gradient(90deg, var(--purple), #b57fe0); }
+    .service-card.card-purple:hover { box-shadow: 0 20px 60px rgba(123,63,160,.2); }
+
+    .service-card.card-blue::before { background: linear-gradient(90deg, var(--blue), #96bdff); }
+    .service-card.card-blue:hover { box-shadow: 0 20px 60px rgba(91,143,212,.2); }
+
+    .service-card.card-orange::before { background: linear-gradient(90deg, var(--orange), #ffa878); }
+    .service-card.card-orange:hover { box-shadow: 0 20px 60px rgba(255,107,43,.2); }
+
+    .service-icon-wrap {
+      width: 68px; height: 68px;
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      margin-bottom: 22px;
+    }
+
+    .icon-bg-pink { background: linear-gradient(135deg, #ffe0f3, #ffc2e7); }
+    .icon-bg-purple { background: linear-gradient(135deg, #ede0ff, #d8bfff); }
+    .icon-bg-blue { background: linear-gradient(135deg, #dceeff, #b8d8ff); }
+    .icon-bg-orange { background: linear-gradient(135deg, #ffe8dc, #ffcdb5); }
+
+    .service-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-size: 15px;
+      color: #5a5a7a;
+      line-height: 1.7;
+    }
+
+    .service-card-tag {
+      display: inline-block;
+      margin-top: 18px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      letter-spacing: .5px;
+    }
+
+    /* =============================================
+       GALLERY
+    ============================================= */
+    #galeria {
+      padding: 100px 0;
+      background: #fff;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 280px 280px;
+      gap: 16px;
+    }
+
+    .gallery-item {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+
+    .gallery-item:hover img { transform: scale(1.07); }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(123,63,160,.6) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--transition);
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+    }
+
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .gallery-overlay span {
+      color: #fff;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .gi-1 { grid-column: 1/5; grid-row: 1/2; }
+    .gi-2 { grid-column: 5/9; grid-row: 1/3; }
+    .gi-3 { grid-column: 9/13; grid-row: 1/2; }
+    .gi-4 { grid-column: 1/5; grid-row: 2/3; }
+    .gi-5 { grid-column: 9/13; grid-row: 2/3; }
+
+    .gallery-cta {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(3, 200px);
+      }
+      .gi-1 { grid-column: 1/2; grid-row: 1/2; }
+      .gi-2 { grid-column: 2/3; grid-row: 1/3; }
+      .gi-3 { grid-column: 1/2; grid-row: 2/3; }
+      .gi-4 { grid-column: 1/2; grid-row: 3/4; }
+      .gi-5 { grid-column: 2/3; grid-row: 3/4; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(5, 220px);
+      }
+      .gi-1, .gi-2, .gi-3, .gi-4, .gi-5 { grid-column: 1; grid-row: auto; }
+    }
+
+    /* =============================================
+       TESTIMONIALS
+    ============================================= */
+    #depoimentos {
+      padding: 100px 0;
+      background: linear-gradient(160deg, #FFF5FB 0%, #F5EEFF 50%, #EEF4FF 100%);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+
+    .testimonial-card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 32px 28px;
+      position: relative;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .testimonial-card:hover { transform: translateY(-6px); }
+
+    .testimonial-card:nth-child(1) { box-shadow: 0 8px 40px rgba(233,30,140,.12); }
+    .testimonial-card:nth-child(1):hover { box-shadow: 0 20px 60px rgba(233,30,140,.2); }
+
+    .testimonial-card:nth-child(2) { box-shadow: 0 8px 40px rgba(123,63,160,.12); }
+    .testimonial-card:nth-child(2):hover { box-shadow: 0 20px 60px rgba(123,63,160,.2); }
+
+    .testimonial-card:nth-child(3) { box-shadow: 0 8px 40px rgba(91,143,212,.12); }
+    .testimonial-card:nth-child(3):hover { box-shadow: 0 20px 60px rgba(91,143,212,.2); }
+
+    .quote-icon {
+      font-size: 40px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-stars {
+      color: var(--yellow);
+      font-size: 18px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 2px 4px rgba(255,217,61,.4));
+    }
+
+    .testimonial-text {
+      font-size: 16px;
+      line-height: 1.75;
+      color: #4a4a6a;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 3px solid;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .avatar-pink { border-color: var(--pink); background: linear-gradient(135deg, #ffe0f3, #ffb3d9); color: var(--pink); }
+    .avatar-purple { border-color: var(--purple); background: linear-gradient(135deg, #ede0ff, #d8bfff); color: var(--purple); }
+    .avatar-blue { border-color: var(--blue); background: linear-gradient(135deg, #dceeff, #b8d8ff); color: var(--blue); }
+
+    .author-info h4 { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 16px; }
+    .author-info span { font-size: 13px; color: #7b7b9a; }
+
+    .testimonial-badge {
+      position: absolute;
+      top: -12px; right: 24px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 4px 14px;
+      border-radius: 50px;
+      letter-spacing: .5px;
+    }
+
+    /* =============================================
+       LEAD FORM
+    ============================================= */
+    #contato {
+      padding: 100px 0;
+      background: linear-gradient(135deg, var(--purple) 0%, #5b3fa0 40%, var(--blue) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #contato .dots-bg {
+      background-image: radial-gradient(circle, rgba(255,255,255,.08) 1.5px, transparent 1.5px);
+    }
+
+    .form-wrapper {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .form-content .section-pill {
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.25);
+    }
+
+    .form-content .section-title { color: #fff; }
+
+    .form-content .section-subtitle { color: rgba(255,255,255,.8); max-width: 100%; margin: 0; text-align: left; }
+
+    .form-perks {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-perk {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(255,255,255,.9);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .perk-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .lead-form {
+      background: #fff;
+      border-radius: 28px;
+      padding: 44px 40px;
+      box-shadow: 0 40px 100px rgba(0,0,0,.25);
+    }
+
+    .lead-form h3 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .lead-form .form-subtitle {
+      font-size: 14px;
+      color: #7b7b9a;
+      margin-bottom: 28px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-group label {
+      display: block;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .form-group label span { color: var(--pink); }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e8e8f0;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      color: var(--dark);
+      background: #fafafa;
+      transition: all var(--transition);
+      outline: none;
+      appearance: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--purple);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(123,63,160,.1);
+    }
+
+    .form-control::placeholder { color: #afafc7; }
+
+    select.form-control { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237B3FA0' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--orange), #ffb347);
+      color: var(--dark);
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 30px rgba(255,107,43,.4);
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(255,107,43,.55); }
+    .btn-submit:active { transform: translateY(0); }
+
+    .form-note {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: #afafc7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .form-wrapper { grid-template-columns: 1fr; gap: 48px; }
+      .form-content .section-header { text-align: center; }
+      .form-content .section-subtitle { text-align: center; margin: 0 auto; }
+      .form-perks { align-items: center; }
+    }
+
+    @media (max-width: 480px) {
+      .lead-form { padding: 32px 24px; }
+    }
+
+    /* =============================================
+       LOCATION
+    ============================================= */
+    #localizacao {
+      padding: 100px 0;
+      background: #fff;
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .location-info { padding-top: 10px; }
+
+    .location-info .section-header { text-align: left; margin-bottom: 28px; }
+
+    .location-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding: 18px;
+      background: var(--light-bg);
+      border-radius: 16px;
+      transition: transform var(--transition);
+    }
+
+    .location-detail:hover { transform: translateX(6px); }
+
+    .loc-icon {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .location-detail h4 { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .location-detail p { font-size: 14px; color: #5a5a7a; line-height: 1.5; }
+    .location-detail a { color: var(--purple); font-weight: 700; }
+
+    .location-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 26px;
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      transition: all var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-map {
+      background: linear-gradient(135deg, var(--blue), #7aa8e8);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(91,143,212,.35);
+    }
+
+    .btn-map:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(91,143,212,.5); }
+
+    .btn-wpp-loc {
+      background: linear-gradient(135deg, #25D366, #1da851);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(37,211,102,.3);
+    }
+
+    .btn-wpp-loc:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(37,211,102,.45); }
+
+    .map-container {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      height: 420px;
+    }
+
+    .map-container iframe { width: 100%; height: 100%; border: none; }
+
+    @media (max-width: 900px) {
+      .location-grid { grid-template-columns: 1fr; gap: 40px; }
+      .location-info .section-header { text-align: center; }
+      .location-buttons { justify-content: center; }
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,.8);
+      padding: 70px 0 0;
+    }
+
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 60px;
+    }
+
+    .footer-brand {}
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+
+    .footer-logo-text {
+      font-family: 'Fredoka One', cursive;
+      font-size: 24px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-brand p { font-size: 14px; line-height: 1.7; margin-bottom: 24px; max-width: 280px; }
+
+    .social-links { display: flex; gap: 12px; }
+
+    .social-btn {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      transition: all var(--transition);
+      color: #fff;
+    }
+
+    .social-btn:hover { transform: translateY(-3px); }
+
+    .social-ig { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+    .social-wpp { background: #25D366; }
+    .social-fb { background: #1877F2; }
+
+    .footer-col h4 {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,.65); transition: color var(--transition); }
+    .footer-links a:hover { color: var(--pink); }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,.65);
+      margin-bottom: 12px;
+    }
+
+    .footer-contact-item i { color: var(--pink); font-size: 18px; margin-top: 1px; flex-shrink: 0; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-bottom-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p { font-size: 13px; color: rgba(255,255,255,.4); }
+    .footer-bottom a { color: var(--pink); }
+
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .footer-brand { grid-column: 1/-1; }
+    }
+
+    @media (max-width: 560px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-brand { grid-column: auto; }
+      .footer-bottom-inner { flex-direction: column; text-align: center; }
+    }
+
+    /* =============================================
+       FLOATING WhatsApp BUTTON
+    ============================================= */
+    .float-wpp {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 990;
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, #25D366, #1da851);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(37,211,102,.5);
+      transition: all var(--transition);
+      animation: pulseWpp 3s ease infinite;
+    }
+
+    .float-wpp:hover { transform: scale(1.12); box-shadow: 0 12px 40px rgba(37,211,102,.65); animation: none; }
+
+    @keyframes pulseWpp {
+      0%, 100% { box-shadow: 0 8px 30px rgba(37,211,102,.5); }
+      50% { box-shadow: 0 8px 40px rgba(37,211,102,.7), 0 0 0 10px rgba(37,211,102,.1); }
+    }
+
+    .float-wpp-tooltip {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--dark);
+      color: #fff;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+
+    .float-wpp-tooltip::after {
+      content: '';
+      position: absolute;
+      right: -6px; top: 50%;
+      transform: translateY(-50%);
+      border: 6px solid transparent;
+      border-right: none;
+      border-left-color: var(--dark);
+    }
+
+    .float-wpp:hover .float-wpp-tooltip { opacity: 1; }
+
+    /* =============================================
+       SCROLL TO TOP
+    ============================================= */
+    .scroll-top {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      z-index: 989;
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,.9);
+      border: 2px solid rgba(123,63,160,.2);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      color: var(--purple);
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,.1);
+      transition: all var(--transition);
+      opacity: 0;
+      pointer-events: none;
+      backdrop-filter: blur(10px);
+    }
+
+    .scroll-top.visible { opacity: 1; pointer-events: all; }
+    .scroll-top:hover { transform: translateY(-3px); background: var(--purple); color: #fff; border-color: var(--purple); }
+
+    /* =============================================
+       CONFETTI DOTS (decorative)
+    ============================================= */
+    .confetti-dot {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: .15;
+    }
+
+    /* =============================================
+       PILL COLORS
+    ============================================= */
+    .pill-pink { background: rgba(233,30,140,.1); color: var(--pink); border: 1.5px solid rgba(233,30,140,.2); }
+    .pill-purple { background: rgba(123,63,160,.1); color: var(--purple); border: 1.5px solid rgba(123,63,160,.2); }
+    .pill-orange { background: rgba(255,107,43,.1); color: var(--orange); border: 1.5px solid rgba(255,107,43,.2); }
+    .pill-blue { background: rgba(91,143,212,.1); color: var(--blue); border: 1.5px solid rgba(91,143,212,.2); }
+
+    /* =============================================
+       PHOTO PLACEHOLDER (inline SVG colored backgrounds when images unavailable)
+    ============================================= */
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    /* =============================================
+       LIGHTBOX
+    ============================================= */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,30,.92);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox.active { opacity: 1; pointer-events: all; }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 40px 100px rgba(0,0,0,.5);
+      transform: scale(.85);
+      transition: transform .35s cubic-bezier(.25,.8,.25,1);
+    }
+
+    .lightbox.active .lightbox-img { transform: scale(1); }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,.12);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition);
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,.25); }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       NAVBAR
+  ============================================= -->
+  <nav id="navbar" aria-label="Navegação principal">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo" aria-label="Casa Criativa — Início">
+        <div class="nav-logo-icon" aria-hidden="true">🎨</div>
+        <span class="nav-logo-text">Casa Criativa</span>
+      </a>
+
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="#home">Início</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#localizacao">Localização</a></li>
+        <li><a href="https://wa.me/5554999170574?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20as%20aulas%20da%20Casa%20Criativa%20🎨" target="_blank" rel="noopener noreferrer" class="nav-cta">Falar no WhatsApp</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- =============================================
+       HERO
+  ============================================= -->
+  <section id="home" aria-label="Bem-vindo à Casa Criativa">
+    <div class="hero-blobs" aria-hidden="true">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="blob blob-4"></div>
+    </div>
+    <div class="dots-bg" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <!-- Text -->
+      <div class="hero-text fade-in">
+        <div class="hero-badge">
+          <i class="ri-sparkling-2-fill" aria-hidden="true"></i>
+          Estúdio de Arte Infantil em Passo Fundo
+        </div>
+        <h1 class="hero-title">
+          Desperte o<br>
+          <span class="gradient-text">Artista que Vive</span><br>
+          no Seu Filho
+        </h1>
+        <p class="hero-subtitle">
+          Na Casa Criativa, cada pincelada conta uma história. Oferecemos um espaço seguro, colorido e inspirador para crianças e jovens expressarem sua criatividade através da arte.
+        </p>
+        <div class="hero-buttons">
+          <a href="https://wa.me/5554999170574?text=Olá!%20Quero%20saber%20mais%20sobre%20as%20aulas%20da%20Casa%20Criativa%20🎨%20Como%20funciona%20a%20matrícula?" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            <i class="ri-whatsapp-fill" aria-hidden="true"></i>
+            Quero Saber Mais
+          </a>
+          <a href="#servicos" class="btn-secondary">
+            <i class="ri-palette-line" aria-hidden="true"></i>
+            Nossos Serviços
+          </a>
+        </div>
+        <div class="hero-stats" role="list" aria-label="Números da Casa Criativa">
+          <div class="stat-item" role="listitem">
+            <div class="stat-number">+200</div>
+            <div class="stat-label">Alunos felizes</div>
+          </div>
+          <div class="stat-item" role="listitem">
+            <div class="stat-number">5+</div>
+            <div class="stat-label">Anos de experiência</div>
+          </div>
+          <div class="stat-item" role="listitem">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Pais satisfeitos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Mosaic -->
+      <div class="hero-visual fade-in-right" aria-hidden="true" style="transition-delay:.2s">
+        <div class="hero-mosaic">
+          <div class="mosaic-img">
+            <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&q=85&auto=format" alt="Criança pintando com alegria" loading="lazy" />
+          </div>
+          <div class="mosaic-img">
+            <img src="https://images.unsplash.com/photo-1588075592405-d3acf2b2e7c3?w=400&q=85&auto=format" alt="Aula de arte infantil" loading="lazy" />
+          </div>
+          <div class="mosaic-img">
+            <img src="https://images.unsplash.com/photo-1602030638412-bb8dcc0bc8b0?w=400&q=85&auto=format" alt="Materiais de arte coloridos" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="hero-float-badge hero-float-badge-1">
+          <div class="float-icon float-icon-pink">🌸</div>
+          <div>
+            <div style="font-size:12px;color:#888;font-weight:600">Próxima turma</div>
+            <div>Vagas abertas!</div>
+          </div>
+        </div>
+
+        <div class="hero-float-badge hero-float-badge-2">
+          <div class="float-icon float-icon-yellow">⭐</div>
+          <div>
+            <div style="font-size:12px;color:#888;font-weight:600">Avaliação</div>
+            <div>5.0 ★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider" style="background:#fff" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#fff"/>
+    </svg>
+  </div>
+
+  <!-- =============================================
+       SOBRE
+  ============================================= -->
+  <section id="sobre" aria-labelledby="sobre-title">
+    <div class="section-container">
+      <div class="about-grid">
+        <!-- Image -->
+        <div class="about-img-wrap fade-in-left">
+          <div class="about-deco-circle" aria-hidden="true"></div>
+          <div class="about-main-img">
+            <img src="https://images.unsplash.com/photo-1541932741-73ca0a4f26e6?w=700&q=85&auto=format" alt="Espaço aconchegante da Casa Criativa com prateleiras de arte" loading="lazy" />
+          </div>
+          <div class="about-accent about-accent-1">
+            <img src="https://images.unsplash.com/photo-1607453998774-d533f65dac99?w=300&q=85&auto=format" alt="Tela com pintura de margaridas coloridas" loading="lazy" />
+          </div>
+          <div class="about-accent about-accent-2">
+            <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&q=85&auto=format" alt="Criança concentrada pintando" loading="lazy" />
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="about-content fade-in-right" style="transition-delay:.15s">
+          <div class="section-header">
+            <div class="section-pill pill-pink">
+              <i class="ri-heart-fill" aria-hidden="true"></i>
+              Sobre Nós
+            </div>
+            <h2 class="section-title" id="sobre-title">
+              Um Espaço Feito<br>com <span style="background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Amor e Cores</span>
+            </h2>
+          </div>
+
+          <p class="about-text">
+            A <strong>Casa Criativa</strong> nasceu do desejo de oferecer às crianças e jovens de Passo Fundo um espaço onde a imaginação não tem limites. Aqui, cada aluno é encorajado a explorar sua expressão artística de maneira única, desenvolvendo confiança, coordenação motora e sensibilidade estética.
+          </p>
+          <p class="about-text" style="margin-top:-8px">
+            Nossa equipe de educadores apaixonados cria experiências que vão além da pintura — são lições de vida embaladas em cores, texturas e sorrisos.
+          </p>
+
+          <div class="about-values" role="list" aria-label="Nossos valores">
+            <div class="value-card" role="listitem">
+              <div class="value-icon" style="background:linear-gradient(135deg,#ffe0f3,#ffc2e7)" aria-hidden="true">🎨</div>
+              <div>
+                <h4>Criatividade</h4>
+                <p>Estimulamos a livre expressão e o pensamento criativo</p>
+              </div>
+            </div>
+            <div class="value-card" role="listitem">
+              <div class="value-icon" style="background:linear-gradient(135deg,#dceeff,#b8d8ff)" aria-hidden="true">📚</div>
+              <div>
+                <h4>Aprendizado</h4>
+                <p>Técnicas artísticas adaptadas para cada faixa etária</p>
+              </div>
+            </div>
+            <div class="value-card" role="listitem">
+              <div class="value-icon" style="background:linear-gradient(135deg,#ede0ff,#d8bfff)" aria-hidden="true">🌟</div>
+              <div>
+                <h4>Diversão</h4>
+                <p>Um ambiente lúdico e cheio de alegria e energia</p>
+              </div>
+            </div>
+            <div class="value-card" role="listitem">
+              <div class="value-icon" style="background:linear-gradient(135deg,#ffe8dc,#ffcdb5)" aria-hidden="true">💛</div>
+              <div>
+                <h4>Expressão</h4>
+                <p>Cada criança encontra sua voz através da arte</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SERVICES
+  ============================================= -->
+  <section id="servicos" aria-labelledby="servicos-title">
+    <div class="dots-bg" aria-hidden="true"></div>
+    <div class="section-container" style="position:relative;z-index:1;padding-top:100px;padding-bottom:100px">
+      <div class="section-header fade-in">
+        <div class="section-pill pill-purple">
+          <i class="ri-brush-fill" aria-hidden="true"></i>
+          O que Oferecemos
+        </div>
+        <h2 class="section-title" id="servicos-title">
+          Atividades que<br>
+          <span style="background:linear-gradient(135deg,var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Transformam Vidas</span>
+        </h2>
+        <p class="section-subtitle">De aulas regulares a festas especiais, temos a experiência perfeita para o seu filho</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card card-pink fade-in" style="transition-delay:.05s" role="article">
+          <div class="service-icon-wrap icon-bg-pink" aria-hidden="true">🖌️</div>
+          <h3>Aulas de Pintura</h3>
+          <p>Técnicas de aquarela, acrílica, guache e muito mais. Aulas semanais com acompanhamento personalizado para cada criança descobrir seu estilo único.</p>
+          <span class="service-card-tag" style="background:rgba(233,30,140,.1);color:var(--pink)">A partir de 5 anos</span>
+        </div>
+
+        <div class="service-card card-purple fade-in" style="transition-delay:.1s" role="article">
+          <div class="service-icon-wrap icon-bg-purple" aria-hidden="true">👫</div>
+          <h3>Atividades em Grupo</h3>
+          <p>Projetos coletivos que desenvolvem socialização, trabalho em equipe e respeito às diferenças — tudo isso enquanto criam arte incrível juntos.</p>
+          <span class="service-card-tag" style="background:rgba(123,63,160,.1);color:var(--purple)">Turmas reduzidas</span>
+        </div>
+
+        <div class="service-card card-orange fade-in" style="transition-delay:.15s" role="article">
+          <div class="service-icon-wrap icon-bg-orange" aria-hidden="true">🎉</div>
+          <h3>Festas e Eventos</h3>
+          <p>Aniversários e celebrações especiais com o tema artístico! As crianças criam sua própria obra como lembrança inesquecível do momento especial.</p>
+          <span class="service-card-tag" style="background:rgba(255,107,43,.1);color:var(--orange)">Sob encomenda</span>
+        </div>
+
+        <div class="service-card card-blue fade-in" style="transition-delay:.2s" role="article">
+          <div class="service-icon-wrap icon-bg-blue" aria-hidden="true">✨</div>
+          <h3>Workshops</h3>
+          <p>Imersões temáticas intensivas em diferentes modalidades: escultura, arte digital, colagem, aquarela botânica e outras técnicas fascinantes.</p>
+          <span class="service-card-tag" style="background:rgba(91,143,212,.1);color:var(--blue)">Fins de semana</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider -->
+  <div class="wave-divider" style="background:#fff" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,40 C480,80 960,0 1440,40 L1440,0 L0,0 Z" fill="transparent"/>
+      <path d="M0,0 C480,80 960,0 1440,40 L1440,80 L0,80 Z" fill="#fff"/>
+    </svg>
+  </div>
+
+  <!-- =============================================
+       GALLERY
+  ============================================= -->
+  <section id="galeria" aria-labelledby="galeria-title">
+    <div class="section-container">
+      <div class="section-header fade-in">
+        <div class="section-pill pill-orange">
+          <i class="ri-image-2-fill" aria-hidden="true"></i>
+          Nossa Galeria
+        </div>
+        <h2 class="section-title" id="galeria-title">
+          Veja a Magia<br>
+          <span style="background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Acontecer</span>
+        </h2>
+        <p class="section-subtitle">Cada foto conta a história de um momento criativo e especial</p>
+      </div>
+
+      <div class="gallery-grid fade-in" style="transition-delay:.1s" role="list" aria-label="Galeria de fotos da Casa Criativa">
+        <div class="gallery-item gi-1" role="listitem" tabindex="0" aria-label="Abrir foto: Prateleiras coloridas do estúdio">
+          <img src="https://images.unsplash.com/photo-1555685812-4b8f59697ef2?w=600&q=85&auto=format" alt="Prateleiras coloridas com materiais de arte no estúdio" loading="lazy" />
+          <div class="gallery-overlay"><span>Nosso Espaço</span></div>
+        </div>
+        <div class="gallery-item gi-2" role="listitem" tabindex="0" aria-label="Abrir foto: Crianças em aula de arte">
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=85&auto=format" alt="Crianças concentradas em aula de arte" loading="lazy" />
+          <div class="gallery-overlay"><span>Aulas em Grupo</span></div>
+        </div>
+        <div class="gallery-item gi-3" role="listitem" tabindex="0" aria-label="Abrir foto: Cavalete com tela colorida">
+          <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&q=85&auto=format" alt="Cavalete com tela pintada colorida" loading="lazy" />
+          <div class="gallery-overlay"><span>Obras dos Alunos</span></div>
+        </div>
+        <div class="gallery-item gi-4" role="listitem" tabindex="0" aria-label="Abrir foto: Criança pintando">
+          <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600&q=85&auto=format" alt="Criança pintando com tinta guache" loading="lazy" />
+          <div class="gallery-overlay"><span>Momento Criativo</span></div>
+        </div>
+        <div class="gallery-item gi-5" role="listitem" tabindex="0" aria-label="Abrir foto: Materiais de arte">
+          <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=85&auto=format" alt="Pincéis e materiais de arte coloridos" loading="lazy" />
+          <div class="gallery-overlay"><span>Materiais e Cor</span></div>
+        </div>
+      </div>
+
+      <div class="gallery-cta fade-in" style="transition-delay:.2s">
+        <a href="https://wa.me/5554999170574?text=Olá!%20Gostaria%20de%20conhecer%20mais%20sobre%20a%20Casa%20Criativa%20🎨%20Podem%20me%20contar%20mais%20sobre%20as%20aulas?" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display:inline-flex">
+          <i class="ri-instagram-fill" aria-hidden="true"></i>
+          Ver mais no Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       TESTIMONIALS
+  ============================================= -->
+  <section id="depoimentos" aria-labelledby="depoimentos-title">
+    <div class="dots-bg" aria-hidden="true"></div>
+    <div class="section-container" style="position:relative;z-index:1;padding-top:100px;padding-bottom:100px">
+      <div class="section-header fade-in">
+        <div class="section-pill pill-pink">
+          <i class="ri-chat-heart-fill" aria-hidden="true"></i>
+          Depoimentos
+        </div>
+        <h2 class="section-title" id="depoimentos-title">
+          O Que as Famílias<br>
+          <span style="background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Estão Dizendo</span>
+        </h2>
+        <p class="section-subtitle">Histórias reais de pais e mães que transformaram o tempo livre dos filhos em arte</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-in" style="transition-delay:.05s" role="article">
+          <div class="testimonial-badge">Mãe de aluna</div>
+          <div class="quote-icon" aria-hidden="true">💬</div>
+          <div class="testimonial-stars" aria-label="5 estrelas">★★★★★</div>
+          <p class="testimonial-text">"Minha filha Valentina era tímida e insegura. Depois de três meses na Casa Criativa, ela se transformou! Chega em casa toda animada mostrando o que criou. A professora tem uma sensibilidade incrível com as crianças. Recomendo demais!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar avatar-pink" aria-hidden="true">M</div>
+            <div class="author-info">
+              <h4>Mariana Oliveira</h4>
+              <span>Mãe da Valentina, 7 anos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in" style="transition-delay:.1s" role="article">
+          <div class="testimonial-badge">Pai de aluno</div>
+          <div class="quote-icon" aria-hidden="true">💬</div>
+          <div class="testimonial-stars" aria-label="5 estrelas">★★★★★</div>
+          <p class="testimonial-text">"O Lucas não largava o tablet de jeito nenhum. Uma amiga nos indicou a Casa Criativa, e foi a melhor decisão! Hoje ele passa horas pintando e criando, todo orgulhoso dos seus trabalhos. O espaço é lindo, seguro e os professores são apaixonados."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar avatar-purple" aria-hidden="true">R</div>
+            <div class="author-info">
+              <h4>Ricardo Ferreira</h4>
+              <span>Pai do Lucas, 9 anos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in" style="transition-delay:.15s" role="article">
+          <div class="testimonial-badge">Mãe de aluno</div>
+          <div class="quote-icon" aria-hidden="true">💬</div>
+          <div class="testimonial-stars" aria-label="5 estrelas">★★★★★</div>
+          <p class="testimonial-text">"Fizemos o aniversário do Théo de 8 anos na Casa Criativa e foi absolutamente mágico! Todas as crianças saíram com uma tela pintada por elas mesmas. Os adultos também ficaram encantados com o espaço. Uma experiência que ninguém esquece!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar avatar-blue" aria-hidden="true">C</div>
+            <div class="author-info">
+              <h4>Camila Bertolucci</h4>
+              <span>Mãe do Théo, 8 anos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       LEAD FORM
+  ============================================= -->
+  <section id="contato" aria-labelledby="contato-title">
+    <div class="dots-bg" aria-hidden="true"></div>
+
+    <!-- Decorative blobs -->
+    <div style="position:absolute;top:-60px;left:-60px;width:300px;height:300px;background:rgba(255,255,255,.06);border-radius:50%;pointer-events:none" aria-hidden="true"></div>
+    <div style="position:absolute;bottom:-80px;right:-40px;width:400px;height:400px;background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none" aria-hidden="true"></div>
+
+    <div class="section-container" style="position:relative;z-index:1;padding-top:100px;padding-bottom:100px">
+      <div class="form-wrapper">
+        <!-- Left content -->
+        <div class="form-content fade-in-left">
+          <div class="section-header" style="text-align:left;margin-bottom:24px">
+            <div class="section-pill">
+              <i class="ri-pencil-fill" aria-hidden="true"></i>
+              Faça sua Matrícula
+            </div>
+            <h2 class="section-title" id="contato-title">
+              Garanta a Vaga<br>do Seu Filho!
+            </h2>
+            <p class="section-subtitle" style="color:rgba(255,255,255,.8)">
+              As turmas são reduzidas para garantir atenção individualizada. Não perca sua vaga!
+            </p>
+          </div>
+
+          <div class="form-perks" role="list" aria-label="Vantagens de se inscrever">
+            <div class="form-perk" role="listitem">
+              <div class="perk-icon" aria-hidden="true">🎨</div>
+              <span>Aula experimental gratuita</span>
+            </div>
+            <div class="form-perk" role="listitem">
+              <div class="perk-icon" aria-hidden="true">📅</div>
+              <span>Horários flexíveis: manhã, tarde e sábados</span>
+            </div>
+            <div class="form-perk" role="listitem">
+              <div class="perk-icon" aria-hidden="true">🌈</div>
+              <span>Materiais inclusos nas aulas</span>
+            </div>
+            <div class="form-perk" role="listitem">
+              <div class="perk-icon" aria-hidden="true">👩‍🏫</div>
+              <span>Turmas com no máximo 8 alunos</span>
+            </div>
+            <div class="form-perk" role="listitem">
+              <div class="perk-icon" aria-hidden="true">📸</div>
+              <span>Registro mensal das obras para os pais</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="fade-in-right" style="transition-delay:.15s">
+          <form class="lead-form" id="lead-form" novalidate aria-labelledby="contato-title">
+            <h3>Entre em Contato 🎉</h3>
+            <p class="form-subtitle">Preencha abaixo e entraremos em contato pelo WhatsApp</p>
+
+            <div class="form-group">
+              <label for="f-nome">Nome completo <span aria-hidden="true">*</span></label>
+              <input type="text" id="f-nome" name="nome" class="form-control" placeholder="Ex: Ana Beatriz Lima" required autocomplete="name" />
+            </div>
+
+            <div class="form-group">
+              <label for="f-whatsapp">Seu WhatsApp <span aria-hidden="true">*</span></label>
+              <input type="tel" id="f-whatsapp" name="whatsapp" class="form-control" placeholder="(54) 99999-9999" required autocomplete="tel" />
+            </div>
+
+            <div class="form-group">
+              <label for="f-idade">Idade da criança <span aria-hidden="true">*</span></label>
+              <select id="f-idade" name="idade" class="form-control" required>
+                <option value="" disabled selected>Selecione a idade</option>
+                <option value="4-5 anos">4–5 anos</option>
+                <option value="6-7 anos">6–7 anos</option>
+                <option value="8-10 anos">8–10 anos</option>
+                <option value="11-13 anos">11–13 anos</option>
+                <option value="14+ anos">14+ anos</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="f-horario">Horário preferido <span aria-hidden="true">*</span></label>
+              <select id="f-horario" name="horario" class="form-control" required>
+                <option value="" disabled selected>Selecione o horário</option>
+                <option value="Manhã (9h–12h)">Manhã (9h–12h)</option>
+                <option value="Tarde (14h–18h)">Tarde (14h–18h)</option>
+                <option value="Sábado de manhã">Sábado de manhã</option>
+                <option value="Sábado à tarde">Sábado à tarde</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn-submit">
+              <i class="ri-whatsapp-fill" aria-hidden="true"></i>
+              Enviar pelo WhatsApp
+            </button>
+
+            <p class="form-note">
+              <i class="ri-lock-2-line" aria-hidden="true"></i>
+              Seus dados são seguros e não serão compartilhados
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       LOCATION
+  ============================================= -->
+  <section id="localizacao" aria-labelledby="localizacao-title">
+    <div class="section-container">
+      <div class="section-header fade-in">
+        <div class="section-pill pill-blue">
+          <i class="ri-map-pin-fill" aria-hidden="true"></i>
+          Onde Estamos
+        </div>
+        <h2 class="section-title" id="localizacao-title">
+          Venha nos <span style="background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Visitar</span>
+        </h2>
+        <p class="section-subtitle">Estamos no coração de Passo Fundo, de fácil acesso e com estacionamento próximo</p>
+      </div>
+
+      <div class="location-grid">
+        <div class="location-info fade-in-left">
+          <div class="location-detail">
+            <div class="loc-icon" style="background:linear-gradient(135deg,#ffe0f3,#ffc2e7)" aria-hidden="true">
+              <i class="ri-map-pin-2-fill" style="color:var(--pink);font-size:22px"></i>
+            </div>
+            <div>
+              <h4>Endereço</h4>
+              <p>Galeria Martins — R. Paissandú, 1850, Sala 25<br>Centro, Passo Fundo – RS, 99010-102</p>
+            </div>
+          </div>
+
+          <div class="location-detail">
+            <div class="loc-icon" style="background:linear-gradient(135deg,#ede0ff,#d8bfff)" aria-hidden="true">
+              <i class="ri-phone-fill" style="color:var(--purple);font-size:22px"></i>
+            </div>
+            <div>
+              <h4>Telefone / WhatsApp</h4>
+              <p><a href="tel:+5554999170574">(54) 99917-0574</a></p>
+            </div>
+          </div>
+
+          <div class="location-detail">
+            <div class="loc-icon" style="background:linear-gradient(135deg,#dceeff,#b8d8ff)" aria-hidden="true">
+              <i class="ri-time-fill" style="color:var(--blue);font-size:22px"></i>
+            </div>
+            <div>
+              <h4>Horário de Funcionamento</h4>
+              <p>Segunda a Sexta: 9h às 18h<br>Sábados: 9h às 13h</p>
+            </div>
+          </div>
+
+          <div class="location-buttons">
+            <a href="https://www.google.com/maps/search/?api=1&query=R.+Paissandú+1850+Passo+Fundo+RS" target="_blank" rel="noopener noreferrer" class="btn-directions btn-map" aria-label="Abrir rota no Google Maps">
+              <i class="ri-map-2-fill" aria-hidden="true"></i>
+              Como Chegar
+            </a>
+            <a href="https://wa.me/5554999170574?text=Olá!%20Gostaria%20de%20agendar%20uma%20visita%20à%20Casa%20Criativa%20🎨" target="_blank" rel="noopener noreferrer" class="btn-directions btn-wpp-loc" aria-label="Agendar visita pelo WhatsApp">
+              <i class="ri-whatsapp-fill" aria-hidden="true"></i>
+              Agendar Visita
+            </a>
+          </div>
+        </div>
+
+        <div class="map-container fade-in-right" style="transition-delay:.15s">
+          <iframe
+            title="Localização da Casa Criativa no Google Maps"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3524.1234567890!2d-52.4043!3d-28.2620!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94e2bc4f0e0e0e0e%3A0x1234567890abcdef!2sGaleria%20Martins%2C%20R.%20Paissandú%2C%201850%20-%20Centro%2C%20Passo%20Fundo%20-%20RS!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOOTER
+  ============================================= -->
+  <footer role="contentinfo">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-icon" aria-hidden="true">🎨</div>
+          <span class="footer-logo-text">Casa Criativa</span>
+        </div>
+        <p>Estúdio de arte infantil em Passo Fundo, RS. Um espaço onde a imaginação não tem limites e cada criança descobre seu talento através da arte.</p>
+        <div class="social-links" role="list" aria-label="Redes sociais">
+          <a href="https://instagram.com/casacriativapf" target="_blank" rel="noopener noreferrer" class="social-btn social-ig" aria-label="Instagram da Casa Criativa">
+            <i class="ri-instagram-fill" aria-hidden="true"></i>
+          </a>
+          <a href="https://wa.me/5554999170574" target="_blank" rel="noopener noreferrer" class="social-btn social-wpp" aria-label="WhatsApp da Casa Criativa">
+            <i class="ri-whatsapp-fill" aria-hidden="true"></i>
+          </a>
+          <a href="https://facebook.com/casacriativapf" target="_blank" rel="noopener noreferrer" class="social-btn social-fb" aria-label="Facebook da Casa Criativa">
+            <i class="ri-facebook-fill" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul class="footer-links" role="list">
+          <li><a href="#home">Início</a></li>
+          <li><a href="#sobre">Sobre Nós</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Serviços</h4>
+        <ul class="footer-links" role="list">
+          <li><a href="#servicos">Aulas de Pintura</a></li>
+          <li><a href="#servicos">Atividades em Grupo</a></li>
+          <li><a href="#servicos">Festas e Eventos</a></li>
+          <li><a href="#servicos">Workshops</a></li>
+          <li><a href="#contato">Matrículas</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <div class="footer-contact-item">
+          <i class="ri-map-pin-fill" aria-hidden="true"></i>
+          <span>Galeria Martins, R. Paissandú, 1850 – Sala 25, Passo Fundo – RS</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ri-phone-fill" aria-hidden="true"></i>
+          <a href="tel:+5554999170574" style="color:inherit">(54) 99917-0574</a>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ri-global-fill" aria-hidden="true"></i>
+          <a href="http://casacriativapf.com.br" target="_blank" rel="noopener noreferrer" style="color:inherit">casacriativapf.com.br</a>
+        </div>
+        <div class="footer-contact-item">
+          <i class="ri-time-fill" aria-hidden="true"></i>
+          <span>Seg–Sex: 9h–18h | Sáb: 9h–13h</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>© 2025 <a href="#home">Casa Criativa</a>. Todos os direitos reservados.</p>
+        <p>Desenvolvido com <span style="color:var(--pink)">♥</span> para a arte infantil</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =============================================
+       FLOATING ELEMENTS
+  ============================================= -->
+  <a
+    href="https://wa.me/5554999170574?text=Olá!%20Vim%20pelo%20site%20da%20Casa%20Criativa%20🎨%20e%20gostaria%20de%20mais%20informações!"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="float-wpp"
+    aria-label="Falar com a Casa Criativa pelo WhatsApp"
+  >
+    <div class="float-wpp-tooltip">Falar no WhatsApp</div>
+    <i class="ri-whatsapp-fill" aria-hidden="true"></i>
+  </a>
+
+  <button class="scroll-top" id="scroll-top" aria-label="Voltar ao topo da página">
+    <i class="ri-arrow-up-line" aria-hidden="true"></i>
+  </button>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizar foto em tamanho maior">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Fechar visualização">
+      <i class="ri-close-line" aria-hidden="true"></i>
+    </button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+  </div>
+
+  <!-- =============================================
+       JAVASCRIPT
+  ============================================= -->
+  <script>
+    'use strict';
+
+    /* ---- Navbar scroll ---- */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+      document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+
+    /* ---- Active nav link ---- */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    function updateActiveLink() {
+      const scrollY = window.scrollY + 100;
+      sections.forEach(sec => {
+        const top = sec.offsetTop;
+        const height = sec.offsetHeight;
+        const id = sec.getAttribute('id');
+        if (scrollY >= top && scrollY < top + height) {
+          navLinks.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink, { passive: true });
+    updateActiveLink();
+
+    /* ---- Hamburger menu ---- */
+    const hamburger = document.getElementById('hamburger');
+    const navLinksEl = document.getElementById('nav-links');
+
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.classList.toggle('open');
+      navLinksEl.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    navLinksEl.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinksEl.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* ---- Smooth scroll for anchor links ---- */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ---- Scroll to top ---- */
+    document.getElementById('scroll-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    /* ---- Intersection Observer for fade-in ---- */
+    const fadeEls = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+    fadeEls.forEach(el => observer.observe(el));
+
+    /* ---- Lead Form: WhatsApp submission ---- */
+    document.getElementById('lead-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nome    = this.querySelector('#f-nome').value.trim();
+      const wpp     = this.querySelector('#f-whatsapp').value.trim();
+      const idade   = this.querySelector('#f-idade').value;
+      const horario = this.querySelector('#f-horario').value;
+
+      if (!nome || !wpp || !idade || !horario) {
+        const firstEmpty = [...this.querySelectorAll('[required]')].find(el => !el.value.trim());
+        if (firstEmpty) {
+          firstEmpty.focus();
+          firstEmpty.style.borderColor = 'var(--pink)';
+          firstEmpty.style.boxShadow = '0 0 0 4px rgba(233,30,140,.15)';
+          setTimeout(() => {
+            firstEmpty.style.borderColor = '';
+            firstEmpty.style.boxShadow = '';
+          }, 2500);
+        }
+        return;
+      }
+
+      const msg = `Olá! Tenho interesse nas aulas da Casa Criativa 🎨\n\nNome: ${nome}\nWhatsApp: ${wpp}\nIdade da criança: ${idade}\nHorário preferido: ${horario}`;
+      const url = `https://wa.me/5554999170574?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+
+    /* Clear field error styling on input */
+    document.querySelectorAll('.form-control').forEach(el => {
+      el.addEventListener('input', () => {
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+      });
+    });
+
+    /* ---- Gallery Lightbox ---- */
+    const lightbox   = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn   = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        lightboxImg.src = img.src.replace(/w=\d+/, 'w=1200');
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+
+      item.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    /* ---- Animate stat numbers on scroll ---- */
+    function animateValue(el, start, end, duration) {
+      const startTime = performance.now();
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(start + (end - start) * eased);
+        el.textContent = current + (el.dataset.suffix || '');
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    const statsObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.stat-number').forEach(el => {
+            const text = el.textContent;
+            const match = text.match(/\d+/);
+            if (match) {
+              const num = parseInt(match[0]);
+              const prefix = text.replace(/\d+.*/, '');
+              const suffix = text.replace(/.*\d/, '');
+              el.dataset.suffix = suffix;
+              animateValue(el, 0, num, 1500);
+              el.textContent = prefix + '0' + suffix;
+            }
+          });
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.hero-stats');
+    if (statsSection) statsObserver.observe(statsSection);
+
+    /* ---- WhatsApp input mask ---- */
+    document.getElementById('f-whatsapp').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '').slice(0, 11);
+      if (v.length <= 2) v = v;
+      else if (v.length <= 7) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+      else v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+      this.value = v;
+    });
+  </script>
+</body>
+</html>
