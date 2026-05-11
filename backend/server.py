@@ -1,7 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
@@ -9,6 +8,7 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
+from supabase import create_client, Client
 
 
 ROOT_DIR = Path(__file__).parent
@@ -20,10 +20,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# Supabase connection
+supabase_url = os.environ['SUPABASE_URL']
+supabase_key = os.environ['SUPABASE_SERVICE_KEY']
+supabase: Client = create_client(supabase_url, supabase_key)
 
 # Create the main app without a prefix
 app = FastAPI(title="Lucas Azaro Consulting API")
@@ -48,7 +48,7 @@ class ContactCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=120)
     email: EmailStr
     company: Optional[str] = Field(default=None, max_length=160)
-    service: str = Field(..., max_length=80)  # innovation | ai | digital | other
+    service: str = Field(..., max_length=80)
     message: str = Field(..., min_length=5, max_length=4000)
     locale: Optional[str] = Field(default="en", max_length=4)
 
@@ -74,18 +74,27 @@ async def root():
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
     status_obj = StatusCheck(**input.model_dump())
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    await db.status_checks.insert_one(doc)
+    doc = {
+        "id": status_obj.id,
+        "client_name": status_obj.client_name,
+        "timestamp": status_obj.timestamp.isoformat(),
+    }
+    result = supabase.table("status_checks").insert(doc).execute()
+    if result.data:
+        row = result.data[0]
+        if isinstance(row.get("timestamp"), str):
+            row["timestamp"] = datetime.fromisoformat(row["timestamp"])
+        return StatusCheck(**row)
     return status_obj
 
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
-    rows = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
+    result = supabase.table("status_checks").select("*").order("timestamp", desc=True).limit(1000).execute()
+    rows = result.data or []
     for r in rows:
-        if isinstance(r.get('timestamp'), str):
-            r['timestamp'] = datetime.fromisoformat(r['timestamp'])
+        if isinstance(r.get("timestamp"), str):
+            r["timestamp"] = datetime.fromisoformat(r["timestamp"])
     return rows
 
 
@@ -93,9 +102,22 @@ async def get_status_checks():
 async def create_contact(payload: ContactCreate):
     try:
         obj = Contact(**payload.model_dump())
-        doc = obj.model_dump()
-        doc['created_at'] = doc['created_at'].isoformat()
-        await db.contact_requests.insert_one(doc)
+        doc = {
+            "id": obj.id,
+            "name": obj.name,
+            "email": obj.email,
+            "company": obj.company,
+            "service": obj.service,
+            "message": obj.message,
+            "locale": obj.locale,
+            "created_at": obj.created_at.isoformat(),
+        }
+        result = supabase.table("contact_requests").insert(doc).execute()
+        if result.data:
+            row = result.data[0]
+            if isinstance(row.get("created_at"), str):
+                row["created_at"] = datetime.fromisoformat(row["created_at"])
+            return Contact(**row)
         return obj
     except Exception as e:
         logger.exception("create_contact failed")
@@ -104,10 +126,11 @@ async def create_contact(payload: ContactCreate):
 
 @api_router.get("/contact", response_model=List[Contact])
 async def list_contacts():
-    rows = await db.contact_requests.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    result = supabase.table("contact_requests").select("*").order("created_at", desc=True).limit(500).execute()
+    rows = result.data or []
     for r in rows:
-        if isinstance(r.get('created_at'), str):
-            r['created_at'] = datetime.fromisoformat(r['created_at'])
+        if isinstance(r.get("created_at"), str):
+            r["created_at"] = datetime.fromisoformat(r["created_at"])
     return rows
 
 
@@ -121,7 +144,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
