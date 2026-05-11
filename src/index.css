@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background-color: #050505;
+  color: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Manrope', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #050505;
+  color: #ffffff;
+}
+
+/* Custom selection */
+::selection {
+  background: #00F0FF;
+  color: #050505;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #1f1f1f; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
+
+@layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 187 100% 50%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 187 100% 50%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 187 100% 50%;
+    --radius: 0.25rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+@layer utilities {
+  .font-serif { font-family: 'Cormorant Garamond', serif; }
+  .font-sans  { font-family: 'Manrope', sans-serif; }
+  .font-mono  { font-family: 'JetBrains Mono', monospace; }
+
+  .grain-overlay {
+    position: relative;
+  }
+  .grain-overlay::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 0 1px rgba(0,240,255,0.4), 0 0 24px -4px rgba(0,240,255,0.35);
+  }
+
+  .text-balance { text-wrap: balance; }
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 900ms cubic-bezier(.2,.7,.2,1), transform 900ms cubic-bezier(.2,.7,.2,1);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+/* Tracing border for service cards */
+@keyframes hueShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.trace-card {
+  position: relative;
+  isolation: isolate;
+}
+.trace-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  transition: background 600ms ease;
+  pointer-events: none;
+}
+.trace-card:hover::before {
+  background: linear-gradient(120deg, rgba(0,240,255,0.9), rgba(0,240,255,0.0) 50%, rgba(0,240,255,0.9));
+  background-size: 200% 100%;
+  animation: hueShift 2.6s linear infinite;
+}
+
+/* Cursor blink */
+@keyframes blink { 0%, 50% { opacity: 1 } 50.01%, 100% { opacity: 0 } }
+.caret { display:inline-block; width:.55ch; background:#00F0FF; margin-left:4px; animation: blink 1s steps(2) infinite; }
+
+/* Soft floating dot grid */
+.dot-grid {
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
